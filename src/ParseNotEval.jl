@@ -285,8 +285,8 @@ function parse(T::Type{DateTime}, s::AbstractString)
     y::Year = Dates.Year(parse(Int64, s[1]))
     m::Month = Dates.Month(parse(Int64, s[2]))
     d::Day = Dates.Day(parse(Int64, s[3]))
-    t::Time = Dates.Time(parse(Int64, t))
-    DateTime(y, m, d, t)::DateTime
+    time::Time = Dates.Time(parse(Int64, t))
+    DateTime(y, m, d, time)::DateTime
 end
 
 """
