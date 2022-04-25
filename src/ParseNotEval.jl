@@ -1,5 +1,6 @@
 module ParseNotEval
-using OddStructures
+__precompile__()
+using Dates: Date
 import Base: parse
 """
 - ParseNotEval.jl
@@ -13,8 +14,8 @@ correct type is not found.
 parse(type)
 ```
 """
-function parse(T::Type{Any}, data::AbstractString)
-    x = replace(data, " " => "")
+function parse(T::Type{Any}, s::AbstractString)
+    x = replace(s, " " => "")
     if contains(x, ".")
         try
             x = parse(Float64, x)
@@ -71,8 +72,10 @@ function parse(T::Type{Any}, data::AbstractString)
         return(x)
     end
 end
+"""
 
-function parse(T::Type{Array}, s::String)
+"""
+function parse(T::Type{Array}, s::AbstractString)
     println("calling parse array")
     if ~(contains(s, "["))
         throw(ErrorException("$s not parsable as $T !");)
@@ -81,25 +84,46 @@ function parse(T::Type{Array}, s::String)
     s = replace(s, "]" => "")
     s = replace(s, " " => "")
     dims = split(s, ",")
-    println(dims[1])
     T = typeof(parse(Any, string(dims[1]))) # <- we check type now by parsing any,
 # so that way we can parse as something instead of as Any (waaaay faster.)
-println(T)
     [try; parse(T, d) catch; nothing end for d in dims]
 end
+"""
+
+"""
 parse(T::Type{String}, s::AbstractString) = string(s)
+"""
 
-function parse(T::Type{Dict}, s::String)
-    replace(s, "{" => "")
-
+"""
+function parse(T::Type{Dict}, s::AbstractString)
+    s = replace(s, "{" => "")
+    s = replace(s, "}" => "")
+    s = replace(s, " " => "")
+    # Json formatted dict
+    if contains(s, ":")
+        s = replace(s, ":" => "=>")
+    # Julia formatted dict
+    end
+    valsnkeys = split(s, "=>")
+    vals = valsnkeys[2:2:length(valsnkeys)]
+    keys = valsnkeys[1:2:length(valsnkeys)]
+    newdct = Dict()
+    for (key, val) in zip(keys, vals)
+        push!(newdct, parse(Symbol, key) => parse(Any, val))
+    end
+    newdct
 end
 
-function parse(T::Type{Date}, s::String)
+parse(T::Type{Symbol}, s::AbstractString) = Symbol(s)
 
+function parse(T::Type{Date}, s::AbstractString)
+    # 2013-07-01
 end
 
-function parse(T::Type{Pair}, s::String)
-
+function parse(T::Type{Pair}, s::AbstractString)
+    s = replace(s, " " => "")
+    key_val = split(s, "=>")
+    parse(Symbol, key_val[1]) => parse(Any, key_val)
 end
 
 function parse(T::Type{missing})
@@ -107,6 +131,7 @@ function parse(T::Type{missing})
 end
 
 parse(type::Type, x::Array) = [parse(type, val) for val in x]
+parse(type::Type, x::Pair) = x[1] => parse(type, x[2])
 
-export parse
+export parse, Date
 end # module
