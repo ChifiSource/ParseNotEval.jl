@@ -10,7 +10,7 @@
   </br>
   </div>
 
-  **ParseNotEval** Is a core odd data package that defines acts as a both implicit and explicit type parser. The main usage for such a thing is in file/string reading, by being able to quickly parse strings into their appropriate types. This is helpful if you want to make secure and fast data readers. This module is moreso ecosystem geared.
+  **ParseNotEval** Is a core odd data package that acts as both an implicit and explicit type parser. The main usage for such a thing is in file/string reading, by being able to quickly parse strings into their appropriate types. This is helpful if you want to make secure and fast data readers. This module is moreso ecosystem geared.
   ###
   ### adding and using
   Until the team is ready to release a stable version (**very soon, likely today**,) you will need to add the package via URL:
