@@ -1,0 +1,4 @@
+name = "test"
+uuid = "32a80110-49ab-434d-8ed3-ef5d2e3b75b3"
+authors = ["emmac "]
+version = "0.1.0"

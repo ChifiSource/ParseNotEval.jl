@@ -1,0 +1,8 @@
+name = "doc"
+uuid = "ff35efbe-6abb-426a-8b85-b644a1a15761"
+authors = ["emmac "]
+version = "0.1.0"
+
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+ParseNotEval = "8aa82b3d-5f10-4499-b4c6-079a0c256bc8"
